@@ -36,7 +36,11 @@ module BindableEngine
     def manifest
       @mutex.synchronize do
         @bindables.values.map do |entry|
-          { name: entry[:name], methods: entry[:methods], class: entry[:class] }
+          result = { name: entry[:name], methods: entry[:methods], class: entry[:class] }
+          if entry[:class].respond_to?(:persistence_config)
+            result[:persistence] = entry[:class].persistence_config
+          end
+          result
         end.freeze
       end
     end

@@ -39,6 +39,21 @@ module BindableEngine
       def method_descriptions
         @method_descriptions || {}
       end
+
+      VALID_STRATEGIES = %i[relational graph memory none].freeze
+
+      def persists_with(strategy, context_url: nil, type_name: nil)
+        strategy = strategy.to_sym
+        unless VALID_STRATEGIES.include?(strategy)
+          raise ArgumentError, "Invalid strategy: #{strategy}. Must be one of: #{VALID_STRATEGIES.join(", ")}"
+        end
+
+        @persistence_config = { strategy: strategy, context_url: context_url, type_name: type_name }.freeze
+      end
+
+      def persistence_config
+        @persistence_config || { strategy: :none, context_url: nil, type_name: nil }
+      end
     end
 
     def create(context_record)

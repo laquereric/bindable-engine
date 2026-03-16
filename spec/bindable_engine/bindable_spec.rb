@@ -87,6 +87,58 @@ RSpec.describe BindableEngine::Bindable do
     end
   end
 
+  describe ".persists_with" do
+    it "sets persistence config with all options" do
+      klass = Class.new do
+        include BindableEngine::Bindable
+        bind_as "persistent"
+        persists_with :relational, context_url: "https://vv.dev/ns/plans", type_name: "Plan"
+      end
+      config = klass.persistence_config
+      expect(config[:strategy]).to eq(:relational)
+      expect(config[:context_url]).to eq("https://vv.dev/ns/plans")
+      expect(config[:type_name]).to eq("Plan")
+    end
+
+    it "defaults to :none strategy" do
+      config = bindable_class.persistence_config
+      expect(config[:strategy]).to eq(:none)
+    end
+
+    it "accepts :graph strategy" do
+      klass = Class.new do
+        include BindableEngine::Bindable
+        persists_with :graph, context_url: "https://vv.dev/ns/ontology", type_name: "Concept"
+      end
+      expect(klass.persistence_config[:strategy]).to eq(:graph)
+    end
+
+    it "accepts :memory strategy" do
+      klass = Class.new do
+        include BindableEngine::Bindable
+        persists_with :memory
+      end
+      expect(klass.persistence_config[:strategy]).to eq(:memory)
+    end
+
+    it "raises ArgumentError for invalid strategies" do
+      expect do
+        Class.new do
+          include BindableEngine::Bindable
+          persists_with :redis
+        end
+      end.to raise_error(ArgumentError, /Invalid strategy/)
+    end
+
+    it "freezes the config" do
+      klass = Class.new do
+        include BindableEngine::Bindable
+        persists_with :relational, context_url: "https://vv.dev/ns/plans", type_name: "Plan"
+      end
+      expect(klass.persistence_config).to be_frozen
+    end
+  end
+
   describe "uniform interface" do
     it "defines exactly six interface methods" do
       expect(BindableEngine::Bindable::INTERFACE_METHODS).to eq(

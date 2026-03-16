@@ -11,13 +11,19 @@ module BindableEngine
   #
   # Usage:
   #   Result.success({ id: "42", name: "Alice" })
+  #   Result.success({ id: "42" }, metadata: { control: "CC1.1" })
   #   Result.failure(code: :not_found, message: "User not found")
   #
   class Result
     attr_reader :value, :error
 
-    def self.success(value)
-      new(success: true, value: value)
+    def self.success(value, metadata: nil)
+      wrapped = if metadata
+                  { data: value, metadata: metadata }
+                else
+                  value
+                end
+      new(success: true, value: wrapped)
     end
 
     def self.failure(code:, message:, **extra)

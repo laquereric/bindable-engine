@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module BindableEngine
-  VERSION = File.read(File.expand_path("../../VERSION", __dir__)).strip
+  VERSION = "0.14.30"
 end

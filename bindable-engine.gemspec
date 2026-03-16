@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
   spec.metadata["changelog_uri"] = "#{spec.homepage}/blob/main/CHANGELOG.md"
+  spec.metadata["github_repo"] = "ssh://github.com/laquereric/bindable-engine"
 
   spec.files = Dir.chdir(__dir__) do
     Dir["{lib}/**/*", "LICENSE.txt", "README.md", "VERSION"]

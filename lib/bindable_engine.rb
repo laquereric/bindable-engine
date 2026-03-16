@@ -11,6 +11,11 @@ require_relative "bindable_engine/context_bundle"
 require_relative "bindable_engine/context_assembler"
 require_relative "bindable_engine/message_moderator"
 require_relative "bindable_engine/service_node"
+require_relative "bindable_engine/store"
+require_relative "bindable_engine/stores/memory_store"
+require_relative "bindable_engine/ref"
+require_relative "bindable_engine/ref_resolver"
+require_relative "bindable_engine/serializer"
 
 module BindableEngine
   class Error < StandardError; end
